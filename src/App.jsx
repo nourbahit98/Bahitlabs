@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const contactEmail = "nourbahit98@gmail.com";
 const phoneDisplay = "+31 6 35 65 00 67";
+const assetBase = import.meta.env.BASE_URL;
 
 const services = [
   {
@@ -29,6 +30,8 @@ const projects = [
     text: "QR-bestellen voor snackbars, lunchzaken en foodtrucks. Gasten scannen, bestellen en ondernemers houden overzicht zonder onnodige complexiteit.",
     link: "https://qorder.bahitlabs.nl/",
     cta: "Bekijk Q-order",
+    image: `${assetBase}images/qorder-product.png`,
+    alt: "Premium visual van Q-order QR-bestellen op een telefoon bij een QR-kaart",
     featured: true
   },
   {
@@ -36,14 +39,18 @@ const projects = [
     title: "SnapMijnBrief",
     text: "Een product dat moeilijke brieven begrijpelijk maakt. Uploaden of scannen, simpele uitleg krijgen en weten wat je moet doen.",
     link: "https://snapmijnbrief.nl/",
-    cta: "Bekijk SnapMijnBrief"
+    cta: "Bekijk SnapMijnBrief",
+    image: `${assetBase}images/snapmijnbrief-dark.png`,
+    alt: "Telefoonschermen van SnapMijnBrief in donkere modus"
   },
   {
     label: "Maatwerk",
     title: "Systemen voor bedrijven",
     text: "Websites, portals, dashboards en automatisering gebouwd rond het echte probleem van de ondernemer.",
     link: "#contact",
-    cta: "Bespreek maatwerk"
+    cta: "Bespreek maatwerk",
+    image: `${assetBase}images/snapmijnbrief-light.png`,
+    alt: "Mobiele productschermen als voorbeeld van maatwerk webapps"
   }
 ];
 
@@ -146,7 +153,7 @@ function App() {
         <section className="hero section-dark">
           <div className="hero-copy">
             <p className="eyebrow">BahitLabs OS</p>
-            <h1>Digitale producten. Gebouwd om te werken.</h1>
+            <h1>Strakke digitale producten. Gebouwd om te verkopen.</h1>
             <p>
               Ik ontwerp en bouw websites, webapps, automatisering en slimme
               tools voor ondernemers die sneller, beter en professioneler willen
@@ -163,6 +170,21 @@ function App() {
           </div>
 
           <HeroVisual />
+        </section>
+
+        <section className="visual-strip" aria-label="BahitLabs productbeelden">
+          <img
+            src={`${assetBase}images/qorder-product.png`}
+            alt="Q-order productvisual met telefoon en QR-bestelkaart"
+          />
+          <img
+            src={`${assetBase}images/snapmijnbrief-light.png`}
+            alt="SnapMijnBrief telefoonschermen in lichte modus"
+          />
+          <img
+            src={`${assetBase}images/snapmijnbrief-preview.jpg`}
+            alt="SnapMijnBrief previewbeeld"
+          />
         </section>
 
         <section className="intro">
@@ -210,6 +232,9 @@ function App() {
                 className={`product-card ${project.featured ? "product-card-featured" : ""}`}
                 key={project.title}
               >
+                <div className="product-image">
+                  <img src={project.image} alt={project.alt} loading="lazy" />
+                </div>
                 <div>
                   <p className="product-label">{project.label}</p>
                   <h3>{project.title}</h3>
@@ -339,30 +364,26 @@ function SectionHeading({ kicker, title, id }) {
 
 function HeroVisual() {
   return (
-    <div className="hero-visual" aria-label="Abstracte BahitLabs productinterface">
-      <div className="device device-main">
-        <div className="device-top">
-          <span />
-          <span />
-          <span />
-        </div>
-        <div className="device-content">
-          <span className="device-label">BahitLabs</span>
-          <strong>Idea to live product</strong>
-          <div className="device-bars">
-            <span />
-            <span />
-            <span />
-          </div>
-        </div>
-      </div>
-      <div className="device device-card device-card-one">
+    <div className="hero-visual" aria-label="BahitLabs productbeelden">
+      <figure className="hero-photo">
+        <img
+          src={`${assetBase}images/qorder-product.png`}
+          alt="Q-order QR-bestellen productbeeld"
+        />
+      </figure>
+      <div className="hero-photo-card hero-photo-card-top">
         <span>Q-order</span>
-        <strong>QR bestellen</strong>
+        <strong>QR-bestellen voor horeca</strong>
       </div>
-      <div className="device device-card device-card-two">
-        <span>SnapMijnBrief</span>
-        <strong>Brief simpel uitgelegd</strong>
+      <div className="hero-photo-card hero-photo-card-bottom">
+        <img
+          src={`${assetBase}images/snapmijnbrief-preview.jpg`}
+          alt="SnapMijnBrief mini preview"
+        />
+        <div>
+          <span>SnapMijnBrief</span>
+          <strong>Brieven simpel uitgelegd</strong>
+        </div>
       </div>
     </div>
   );
