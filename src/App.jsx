@@ -6,20 +6,58 @@ const assetBase = import.meta.env.BASE_URL;
 
 const services = [
   {
+    id: "website",
     number: "01",
-    title: "Websites & webshops",
-    text: "Moderne sites die vertrouwen geven, snel laden en bezoekers richting actie brengen."
+    title: "Premium website",
+    short: "Voor ondernemers die online direct professioneel willen overkomen.",
+    outcome: "Design, responsive bouw, contactflow en live oplevering.",
+    idealFor: "ZZP, lokale bedrijven, dienstverleners",
+    image: `${assetBase}images/qorder-product.png`
   },
   {
+    id: "webshop",
     number: "02",
-    title: "Webapps & dashboards",
-    text: "Portals, dashboards en systemen die processen overzichtelijker en sneller maken.",
-    dark: true
+    title: "Webshop & salesflow",
+    short: "Een strakke verkoopervaring voor producten, diensten of pakketten.",
+    outcome: "Productstructuur, checkoutflow, conversieblokken en beheer.",
+    idealFor: "Shops, food, servicepakketten",
+    image: `${assetBase}images/snapmijnbrief-light.png`
   },
   {
+    id: "webapp",
     number: "03",
-    title: "Automatisering & WTB",
-    text: "Slimme tools voor technische bedrijven, horeca en ondernemers met veel handmatig werk."
+    title: "Webapp of dashboard",
+    short: "Maatwerk software voor klanten, teams of interne processen.",
+    outcome: "Login, dashboard, dataflow, beheerpanelen en automatisering.",
+    idealFor: "Portals, planning, klantomgevingen",
+    image: `${assetBase}images/snapmijnbrief-dark.png`
+  },
+  {
+    id: "automation",
+    number: "04",
+    title: "Automatisering",
+    short: "Minder handmatig werk door koppelingen, formulieren en slimme workflows.",
+    outcome: "Procesanalyse, automatisering, notificaties en dashboards.",
+    idealFor: "Administratie, sales, intake, support",
+    image: `${assetBase}images/qorder-product.png`
+  },
+  {
+    id: "qorder",
+    number: "05",
+    title: "Q-order setup",
+    short: "QR-bestellen voor horeca, snackbars, lunchzaken en foodtrucks.",
+    outcome: "Menu, bestelpagina, QR-flow en ondernemer-dashboard.",
+    idealFor: "Horeca en takeaway",
+    image: `${assetBase}images/qorder-product.png`
+  },
+  {
+    id: "technical",
+    number: "06",
+    title: "WTB / technisch systeem",
+    short: "Digitale tools voor technische bedrijven die overzicht nodig hebben.",
+    outcome: "Calculatie, projectoverzicht, rapportage of klantportaal.",
+    idealFor: "WTB, HVAC, installatietechniek",
+    image: `${assetBase}images/snapmijnbrief-light.png`
   }
 ];
 
@@ -45,20 +83,20 @@ const projects = [
   },
   {
     label: "Maatwerk",
-    title: "Systemen voor bedrijven",
+    title: "BahitLabs builds",
     text: "Websites, portals, dashboards en automatisering gebouwd rond het echte probleem van de ondernemer.",
-    link: "#contact",
-    cta: "Bespreek maatwerk",
+    link: "#boeken",
+    cta: "Boek een project",
     image: `${assetBase}images/snapmijnbrief-light.png`,
     alt: "Mobiele productschermen als voorbeeld van maatwerk webapps"
   }
 ];
 
 const processSteps = [
-  ["01", "Luisteren", "We bepalen wat er echt gebouwd moet worden."],
-  ["02", "Ontwerpen", "De flow, structuur en uitstraling worden scherp gezet."],
-  ["03", "Bouwen", "De website of app wordt praktisch en schaalbaar ontwikkeld."],
-  ["04", "Lanceren", "Alles gaat live met aandacht voor snelheid en gebruiksgemak."]
+  ["01", "Kiezen", "Selecteer de dienst die past bij jouw doel."],
+  ["02", "Boeken", "Stuur je voorkeurdatum, budget en korte omschrijving."],
+  ["03", "Scherpstellen", "We bepalen scope, planning en eerste versie."],
+  ["04", "Lanceren", "Ik bouw, test en lever praktisch op."]
 ];
 
 function App() {
@@ -66,18 +104,23 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
+    company: "",
     email: "",
-    projectType: "",
+    phone: "",
+    service: "Premium website",
+    preferredDate: "",
+    preferredTime: "Middag",
+    budget: "",
     message: ""
   });
-  const [formNote, setFormNote] = useState("Je e-mailapp opent met jouw aanvraag.");
+  const [formNote, setFormNote] = useState("Na verzenden opent je e-mailapp met je boekingsaanvraag.");
 
   const navItems = useMemo(
     () => [
-      ["#werk", "Werk"],
       ["#diensten", "Diensten"],
+      ["#werk", "Werk"],
       ["#proces", "Proces"],
-      ["#contact", "Contact"]
+      ["#boeken", "Boeken"]
     ],
     []
   );
@@ -99,19 +142,35 @@ function App() {
     setFormState((current) => ({ ...current, [name]: value }));
   }
 
+  function selectService(service) {
+    setFormState((current) => ({
+      ...current,
+      service: service.title,
+      message:
+        current.message ||
+        `Ik wil graag een kennismaking boeken voor: ${service.title}.\n\nKorte uitleg: `
+    }));
+
+    document.querySelector("#boeken")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
 
-    const subject = encodeURIComponent(
-      `Nieuwe aanvraag via BahitLabs - ${formState.projectType || "Project"}`
-    );
+    const subject = encodeURIComponent(`Boeking via BahitLabs - ${formState.service}`);
     const body = encodeURIComponent(
       [
-        "Nieuwe aanvraag via de BahitLabs website",
+        "Nieuwe boekingsaanvraag via de BahitLabs website",
         "",
         `Naam: ${formState.name}`,
+        `Bedrijf: ${formState.company || "-"}`,
         `E-mail: ${formState.email}`,
-        `Project: ${formState.projectType || "-"}`,
+        `Telefoon: ${formState.phone || "-"}`,
+        "",
+        `Dienst: ${formState.service}`,
+        `Voorkeursdatum: ${formState.preferredDate || "-"}`,
+        `Voorkeurstijd: ${formState.preferredTime || "-"}`,
+        `Budgetindicatie: ${formState.budget || "-"}`,
         "",
         "Bericht:",
         formState.message
@@ -119,7 +178,7 @@ function App() {
     );
 
     window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
-    setFormNote("Je e-mailapp is geopend met jouw aanvraag.");
+    setFormNote("Je e-mailapp is geopend met je boekingsaanvraag.");
   }
 
   return (
@@ -152,24 +211,40 @@ function App() {
       <main id="home">
         <section className="hero section-dark">
           <div className="hero-copy">
-            <p className="eyebrow">BahitLabs OS</p>
-            <h1>Strakke digitale producten. Gebouwd om te verkopen.</h1>
+            <p className="eyebrow">BahitLabs Studio</p>
+            <h1>Boek digitale slagkracht voor je bedrijf.</h1>
             <p>
-              Ik ontwerp en bouw websites, webapps, automatisering en slimme
-              tools voor ondernemers die sneller, beter en professioneler willen
-              werken.
+              Websites, webshops, webapps en automatisering met een strakke
+              productaanpak. Kies je dienst, boek een intake en laat je idee
+              professioneel bouwen.
             </p>
             <div className="hero-actions">
-              <a className="button button-primary" href="#contact">
-                Start een project
+              <a className="button button-primary" href="#boeken">
+                Boek een dienst
               </a>
-              <a className="button button-secondary" href="#werk">
-                Bekijk mijn werk
+              <a className="button button-secondary" href="#diensten">
+                Bekijk diensten
               </a>
+            </div>
+            <div className="hero-metrics" aria-label="BahitLabs kenmerken">
+              <span>Design</span>
+              <span>Development</span>
+              <span>Automatisering</span>
             </div>
           </div>
 
           <HeroVisual />
+        </section>
+
+        <section className="booking-band" aria-label="Snel boeken">
+          <p>Direct boeken</p>
+          <div>
+            {services.slice(0, 4).map((service) => (
+              <button key={service.id} type="button" onClick={() => selectService(service)}>
+                {service.title}
+              </button>
+            ))}
+          </div>
         </section>
 
         <section className="visual-strip" aria-label="BahitLabs productbeelden">
@@ -189,27 +264,47 @@ function App() {
 
         <section className="intro">
           <p className="section-kicker">Wat ik doe</p>
-          <h2>Van losse taken naar slimme systemen die voor je werken.</h2>
+          <h2>Ik maak het idee achter je bedrijf digitaal boekbaar, bruikbaar en schaalbaar.</h2>
           <p>
-            BahitLabs is voor ondernemers die geen standaard template willen,
-            maar een digitale oplossing die echt past bij hun bedrijf. Snel
-            schakelen, strak ontwerpen en praktisch opleveren.
+            Geen losse website zonder richting. BahitLabs combineert design,
+            development en praktische automatisering, zodat bezoekers sneller
+            begrijpen wat je doet en makkelijker actie nemen.
           </p>
         </section>
 
         <section className="services" id="diensten" aria-labelledby="diensten-title">
-          <SectionHeading kicker="Diensten" title="Bouwen met focus." id="diensten-title" />
+          <SectionHeading
+            kicker="Boekbare diensten"
+            title="Kies wat je wilt laten bouwen."
+            id="diensten-title"
+          />
           <div className="service-grid">
             {services.map((service) => (
               <article
-                className={`service-card ${service.dark ? "service-card-dark" : ""}`}
-                key={service.number}
+                className={`service-card ${formState.service === service.title ? "is-selected" : ""}`}
+                key={service.id}
               >
-                <span className="service-number">{service.number}</span>
-                <div>
-                  <h3>{service.title}</h3>
-                  <p>{service.text}</p>
+                <div className="service-image">
+                  <img src={service.image} alt="" loading="lazy" />
                 </div>
+                <div className="service-card-copy">
+                  <span className="service-number">{service.number}</span>
+                  <h3>{service.title}</h3>
+                  <p>{service.short}</p>
+                  <dl>
+                    <div>
+                      <dt>Resultaat</dt>
+                      <dd>{service.outcome}</dd>
+                    </div>
+                    <div>
+                      <dt>Voor</dt>
+                      <dd>{service.idealFor}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <button className="service-book" type="button" onClick={() => selectService(service)}>
+                  Boek deze dienst
+                </button>
               </article>
             ))}
           </div>
@@ -217,10 +312,10 @@ function App() {
 
         <section className="statement section-dark">
           <p className="section-kicker">De richting</p>
-          <h2>Minder handmatig werk. Meer overzicht.</h2>
+          <h2>Minder ruis. Meer resultaat. Sneller naar live.</h2>
           <p>
-            Ik bouw niet alleen websites. Ik bouw digitale producten en systemen
-            die tijd besparen, klanten helpen en bedrijven sterker maken.
+            De site voelt premium, maar blijft praktisch: duidelijke diensten,
+            sterke productbeelden en een directe boekingsaanvraag per dienst.
           </p>
         </section>
 
@@ -254,18 +349,18 @@ function App() {
 
         <section className="split section-light">
           <div>
-            <p className="section-kicker">Design</p>
-            <h2>Ontworpen voor ondernemers. Gebouwd als product.</h2>
+            <p className="section-kicker">Scherper aanbod</p>
+            <h2>Bezoekers hoeven niet te raden wat ze kunnen boeken.</h2>
           </div>
           <p>
-            Alles moet duidelijk voelen: de boodschap, de interface, de actie en
-            het resultaat. Daarom combineert BahitLabs strak design met
-            praktische techniek en snelle oplevering.
+            Elke dienst heeft een duidelijke ingang. Dat maakt de website
+            commerciëler: iemand ziet wat jij bouwt, kiest de juiste categorie en
+            stuurt direct een gerichte aanvraag.
           </p>
         </section>
 
         <section className="process" id="proces" aria-labelledby="proces-title">
-          <SectionHeading kicker="Proces" title="Van idee naar live." id="proces-title" />
+          <SectionHeading kicker="Proces" title="Boeken zonder gedoe." id="proces-title" />
           <div className="process-line">
             {processSteps.map(([number, title, text]) => (
               <article key={number}>
@@ -277,65 +372,119 @@ function App() {
           </div>
         </section>
 
-        <section className="contact section-dark" id="contact">
+        <section className="contact section-dark" id="boeken">
           <div className="contact-copy">
-            <p className="section-kicker">Contact</p>
-            <h2>Heb je een idee dat slimmer kan?</h2>
-            <p>Laat het bouwen door BahitLabs.</p>
+            <p className="section-kicker">Boeken</p>
+            <h2>Boek je kennismaking.</h2>
+            <p>
+              Kies een dienst, geef je voorkeur door en ik ontvang direct een
+              complete aanvraag in mijn mail.
+            </p>
+            <div className="contact-direct">
+              <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+              <a href="tel:+31635650067">{phoneDisplay}</a>
+            </div>
           </div>
 
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <label>
-              <span>Naam</span>
-              <input
-                type="text"
-                name="name"
-                placeholder="Jouw naam"
-                value={formState.name}
-                onChange={handleInput}
-                required
-              />
-            </label>
-            <label>
-              <span>E-mail</span>
-              <input
-                type="email"
-                name="email"
-                placeholder="jij@bedrijf.nl"
-                value={formState.email}
-                onChange={handleInput}
-                required
-              />
-            </label>
-            <label>
-              <span>Project</span>
-              <select
-                name="projectType"
-                value={formState.projectType}
-                onChange={handleInput}
-                required
-              >
-                <option value="">Kies een richting</option>
-                <option>Website of webshop</option>
-                <option>Webapp of dashboard</option>
-                <option>Automatisering</option>
-                <option>WTB / technisch systeem</option>
-                <option>Anders</option>
-              </select>
-            </label>
-            <label>
-              <span>Bericht</span>
-              <textarea
-                name="message"
-                rows="5"
-                placeholder="Vertel kort wat je wilt bouwen."
-                value={formState.message}
-                onChange={handleInput}
-                required
-              />
-            </label>
+          <form className="contact-form booking-form" onSubmit={handleSubmit}>
+            <div className="form-grid">
+              <label>
+                <span>Naam</span>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Jouw naam"
+                  value={formState.name}
+                  onChange={handleInput}
+                  required
+                />
+              </label>
+              <label>
+                <span>Bedrijf</span>
+                <input
+                  type="text"
+                  name="company"
+                  placeholder="Bedrijfsnaam"
+                  value={formState.company}
+                  onChange={handleInput}
+                />
+              </label>
+              <label>
+                <span>E-mail</span>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="jij@bedrijf.nl"
+                  value={formState.email}
+                  onChange={handleInput}
+                  required
+                />
+              </label>
+              <label>
+                <span>Telefoon</span>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="+31 6 ..."
+                  value={formState.phone}
+                  onChange={handleInput}
+                />
+              </label>
+              <label className="form-wide">
+                <span>Dienst</span>
+                <select name="service" value={formState.service} onChange={handleInput} required>
+                  {services.map((service) => (
+                    <option key={service.id}>{service.title}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span>Voorkeursdatum</span>
+                <input
+                  type="date"
+                  name="preferredDate"
+                  value={formState.preferredDate}
+                  onChange={handleInput}
+                />
+              </label>
+              <label>
+                <span>Voorkeurstijd</span>
+                <select
+                  name="preferredTime"
+                  value={formState.preferredTime}
+                  onChange={handleInput}
+                >
+                  <option>Ochtend</option>
+                  <option>Middag</option>
+                  <option>Avond</option>
+                  <option>Maakt niet uit</option>
+                </select>
+              </label>
+              <label className="form-wide">
+                <span>Budgetindicatie</span>
+                <select name="budget" value={formState.budget} onChange={handleInput}>
+                  <option value="">Kies optioneel</option>
+                  <option>Tot 1.000 euro</option>
+                  <option>1.000 - 2.500 euro</option>
+                  <option>2.500 - 5.000 euro</option>
+                  <option>5.000+ euro</option>
+                  <option>Nog niet zeker</option>
+                </select>
+              </label>
+              <label className="form-wide">
+                <span>Wat wil je laten bouwen?</span>
+                <textarea
+                  name="message"
+                  rows="5"
+                  placeholder="Vertel kort wat je nodig hebt, wat er nu niet goed werkt en wanneer je wilt starten."
+                  value={formState.message}
+                  onChange={handleInput}
+                  required
+                />
+              </label>
+            </div>
             <button className="button button-primary" type="submit">
-              Plan een kennismaking
+              Boek deze aanvraag
             </button>
             <p className="form-note">{formNote}</p>
           </form>
@@ -372,8 +521,8 @@ function HeroVisual() {
         />
       </figure>
       <div className="hero-photo-card hero-photo-card-top">
-        <span>Q-order</span>
-        <strong>QR-bestellen voor horeca</strong>
+        <span>Boekbaar</span>
+        <strong>Websites, apps en automatisering</strong>
       </div>
       <div className="hero-photo-card hero-photo-card-bottom">
         <img
@@ -381,8 +530,8 @@ function HeroVisual() {
           alt="SnapMijnBrief mini preview"
         />
         <div>
-          <span>SnapMijnBrief</span>
-          <strong>Brieven simpel uitgelegd</strong>
+          <span>Producten</span>
+          <strong>Q-order en SnapMijnBrief</strong>
         </div>
       </div>
     </div>
